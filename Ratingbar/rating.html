@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="main.css" />
+<title>Rating System</title>
+</head>
+<body onload="reset();">
+
+
+<div id="bar">
+<div>
+ <div id="des"><h2>Your Rating: </h2></div>
+<div id="stars" onmouseout="disable();">
+
+<img  id ="1" src="unselected.png" title="1 star" />
+<img  id ="2" src="unselected.png" title="2 star" />
+<img  id ="3" src="unselected.png" title="3 star" />
+<img  id ="4" src="unselected.png" title="4 star" />
+<img  id ="5" src="unselected.png" title="5 star" />
+<img  id ="6" src="unselected.png" title="6 star" />
+<img id ="7" src="unselected.png" title="7 star" />
+<img  id="8" src="unselected.png" title="8 star" />
+<img  id ="9" src="unselected.png" title="9 star" />
+<img  id ="10" src="unselected.png" title="10 star" />
+</div>
+</div>
+<div id="logo" ><img src="logo.jpg" title="IMDB" height="30px" width="70px" /></div>
+<div id="rate"><h3>Rating <span id="h">: 0/10</span></h3></div>
+<div id="button"><button onclick="reset();"><b>Rate Again!</b></button></div>
+</div>
+
+
+
+
+<script src="rating.js" type="text/javascript"></script>
+</body>
+</html>
