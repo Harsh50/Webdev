@@ -1,10 +1,16 @@
 
 <?php
 session_start();
+
+
 $username="";
-$password="";
 $error1="";$error2="";
+$auth_error="";global $flag;
 global $captcha_error;
+
+
+
+
 function validateCaptcha()
 {
 	$code=htmlspecialchars(trim($_POST["captcha"]));
@@ -18,8 +24,8 @@ function validateCaptcha()
 	return true;
 }
 
- 	 $db=mysqli_connect("localhost","root","","users");
  	 
+ 	 $db=mysqli_connect("localhost","root","","users");
  
     if (mysqli_connect_errno()) {
   echo "Failed to connect to MySQL: " . mysqli_connect_error();
@@ -37,20 +43,18 @@ $error2="* Field cannot be empty";}
  	if(validateCaptcha())
 {	
 $username = mysqli_real_escape_string($db, $_POST['user']);
-$password = sha1(mysqli_real_escape_string($db,$_POST['pass']));
+
+$password= sha1(mysqli_real_escape_string($db,$_POST['pass']));
 
 
-$data = mysqli_query($db,"SELECT * from login");
-while($info = mysqli_fetch_assoc($data))
-{
-	if(strtolower($info['username'])==strtolower($username) && $info['password']==$password)
-	{
-		$_SESSION['user']=$info['username'];
+$data = mysqli_query($db,"SELECT * from login where username='".$username."' and password='".$password."'");
+   if(mysqli_num_rows($data)==1){
+		$_SESSION['user']=$_POST["user"];
 		$_SESSION['authenticated']=true;
-		header("Location:home.php");
+		header("location:home.php");
 		}
-	}
-	echo "Invalid username or password!!";
+	else
+	$auth_error=" *Invalid username or password!!";
 }
 }
 ?>
@@ -62,9 +66,9 @@ body{
 	font-family:sans-serif;
 	font-size:25px;
 	position:absolute;
-	top:15%;
-	left:35%;
-	background-color: lightgrey;
+	top:5%;
+	left:30%;
+	background: #20d8b8;
 	}
 	div{
 		border-style: double;
@@ -72,8 +76,22 @@ body{
 		border-color: black;
 	border-radius:10px;
 	padding:15px;
-	background-color: lightblue;
+	background-color: #fff;
 		}
+		input{
+					height:20px;}
+		a{
+			text-decoration: none;}
+			input[type="submit"],button{
+				height:50px;
+				width:100px;
+				font-size: 20px;
+				font-weight: bold;
+				color:black;}
+				button{float:right;}
+				input[type="submit"],	button{border-radius:10px;}
+				input[type="submit"]:hover,button:hover{
+					background-color: lightblue;}
 	h1
 	{ 
 	   
@@ -88,14 +106,17 @@ body{
 <h1>&nbsp&nbsp&nbspUser Login</h1>
 <div>
 <form action="<?php $_SERVER['PHP_SELF']?>" method="POST">
-Username: <input type="text" name="user" value="<?php echo $username?>"/> <span><?php echo "$error1"?></span><br/><br />
-Password: <input type="password" name="pass" value="" /><span><?php echo "$error2"?></span><br /><br /><br />
+<span><?php echo $auth_error?></span><br/><br/>
+Username: <input type="text" name="user" value="<?php echo $username?>"> <span><?php echo $error1?></span><br/><br />
+Password: <input type="password" name="pass"  /><span><?php echo $error2?></span><br /><br /><br />
 <img id="captcha_image" src="create_image.php"></img><br /><br />
 <label for='captcha' >Enter the code:</label>
     <input type="text" id="captcha" name="captcha"/><span id='captcha_error' class='error'><?php echo $captcha_error?></span><br><br>
-<input type="submit" value="LogIn" /><br/><br/>
+    
+   
+<input type="submit" value="LogIn" /><button><a href="register.php"> Sign Up</a></button>
 </form>
-<a href="register.php"> Sign Up</a>
+
 
 </div>
 </body>
